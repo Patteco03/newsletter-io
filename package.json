@@ -12,6 +12,9 @@
     "dev:server": "yarn workspace @newsletter-io/server dev",
     "dev:web": "yarn workspace @newsletter-io/web dev"
   },
+  "dependencies": {
+    "dotenv": "^17.2.3"
+  },
   "devDependencies": {
     "@types/node": "^24.9.2",
     "typescript": "^5.9.3"

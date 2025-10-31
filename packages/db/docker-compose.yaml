@@ -1,0 +1,23 @@
+name: newsletter_io
+
+services:
+  postgres:
+    image: postgres
+    container_name: newsletter_io
+    environment:
+      POSTGRES_DB: newsletter_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+    ports:
+      - "5432:5432"
+    volumes:
+      - newsletter_io_postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  newsletter_io_postgres_data:
