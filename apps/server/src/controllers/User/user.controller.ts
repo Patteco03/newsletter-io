@@ -25,7 +25,7 @@ router.post(
     const payload = req.body;
 
     const output = await service.login(payload);
-    res.status(201).json(output);
+    res.status(200).json(output);
   }
 );
 
