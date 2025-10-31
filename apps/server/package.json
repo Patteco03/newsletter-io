@@ -10,7 +10,7 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^5.1.0",
-    "@newsletter-io/db": "workspace:*"
+    "@newsletter-io/db": "*"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",

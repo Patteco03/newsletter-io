@@ -3,6 +3,16 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./src/index.ts"
+    },
+    "./*": {
+      "types": "./dist/*.d.ts",
+      "default": "./src/*.ts"
+    }
+  },
   "scripts": {
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
