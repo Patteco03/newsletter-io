@@ -3,12 +3,14 @@ import UserService from "./user.service";
 import { validateData } from "@/middleware/validate";
 import { createUserSchema } from "./dto/create.user.dto";
 import { loginUserSchema } from "./dto/login.user.dto";
+import { authMiddleware } from "@/middleware/auth";
 
 const service = new UserService();
 const router = Router();
 
 router.post(
   "/register",
+  authMiddleware,
   validateData({ body: createUserSchema }),
   async (req: Request, res: Response) => {
     const payload = req.body;
