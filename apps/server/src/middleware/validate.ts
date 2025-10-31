@@ -15,12 +15,9 @@ export function validateData(schema: ValidationSchema) {
       }
 
       if (schema.query) {
-        req.query = schema.query.parse(req.query) as any;
+        req.validated = schema.query.parse(req.query);
       }
 
-      if (schema.params) {
-        req.params = schema.params.parse(req.params) as any
-      }
       next();
     } catch (error) {
       if (error instanceof ZodError) {
