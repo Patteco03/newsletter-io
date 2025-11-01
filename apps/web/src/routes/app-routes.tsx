@@ -4,9 +4,10 @@ import { ProtectedRoute } from "../components/protected-router";
 import PublicLayout from "../layouts/public-layout";
 import DashboardLayout from "../layouts/dashboard-layout";
 
-import Home from "../pages/Home";
-import Login from "../pages/Login";
-import NewsDetail from "../pages/NewsDetail";
+import Home from "@/pages/Home";
+import Login from "@/pages/Login";
+import NewsDetail from "@/pages/NewsDetail";
+import NotFound from "@/pages/NotFound";
 
 export function AppRoutes() {
   return (
@@ -16,7 +17,7 @@ export function AppRoutes() {
       <Route element={<PublicLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/news/:slug" element={<NewsDetail />} />
-        <Route path="*" element={<div>Not Found</div>} />
+        <Route path="*" element={<NotFound />} />
       </Route>
 
       {/* Rotas protegidas (Dashboard) */}
