@@ -42,6 +42,24 @@ export default class CategoryService {
     };
   }
 
+  public async findOne(id: string): Promise<GetCategoryDto> {
+    const category = await this.model.findUnique({
+      where: { id },
+    });
+
+    if (!category) {
+      throw new NotFoundException("Category not found");
+    }
+
+    return {
+      id: category.id,
+      name: category.name,
+      description: category.description || null,
+      created_at: category.createdAt,
+      updated_at: category.updatedAt,
+    };
+  }
+
   public async create(input: CreateCategoryDto): Promise<GetCategoryDto> {
     const checkCategory = await this.model.findUnique({
       where: { name: input.name },
@@ -76,8 +94,8 @@ export default class CategoryService {
 
     const updated = await this.model.update({
       data: input,
-      where: { id }
-    })
+      where: { id },
+    });
 
     return {
       id: updated.id,

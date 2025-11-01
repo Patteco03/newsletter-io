@@ -10,6 +10,7 @@ export interface PaginationDto<T> {
 }
 
 export const paginationSchema = z.object({
+  period: z.enum(["day", "week", "month"]).default("day"),
   page: z.coerce.number().min(1).default(1),
   limit: z.coerce.number().min(1).max(100).default(10),
 });
