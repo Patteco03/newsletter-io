@@ -1,22 +1,58 @@
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { ArrowLeft } from "lucide-react"
-import { Link } from "react-router-dom"
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useAuth } from "@/context/auth-context";
+import { AxiosError } from "axios";
+import { ArrowLeft } from "lucide-react";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+  const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // Lógica de login aqui
-    console.log("Login:", { email, password })
-  }
+  const { login, isLoading } = useAuth();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    try {
+      e.preventDefault();
+      await login(email, password);
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Login error:", error);
+      if (error instanceof AxiosError) {
+        if (error.response?.status === 422) {
+          const errorData = error.response?.data;
+          if (errorData.details) {
+            return errorData.details.map(
+              (error: { field: string; message: string }) => {
+                toast.error(error.message);
+              }
+            );
+          }
+        }
+
+        toast.error(
+          error.response?.data.message || "Email ou senha incorretos"
+        );
+        return;
+      }
+
+      toast.error("Erro ao fazer login");
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-linear-to-br from-background to-muted/20">
@@ -33,8 +69,12 @@ export default function LoginPage() {
 
         <Card>
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold text-center">Bem-vindo de volta</CardTitle>
-            <CardDescription className="text-center">Entre com suas credenciais para acessar sua conta</CardDescription>
+            <CardTitle className="text-2xl font-bold text-center">
+              Bem-vindo de volta
+            </CardTitle>
+            <CardDescription className="text-center">
+              Entre com suas credenciais para acessar sua conta
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -65,7 +105,7 @@ export default function LoginPage() {
                   required
                 />
               </div>
-              <Button type="submit" className="w-full">
+              <Button type="submit" className="w-full" disabled={isLoading}>
                 Entrar
               </Button>
             </form>
@@ -81,5 +121,5 @@ export default function LoginPage() {
         </Card>
       </div>
     </div>
-  )
+  );
 }
