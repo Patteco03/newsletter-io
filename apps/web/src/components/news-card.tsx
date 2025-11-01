@@ -7,7 +7,7 @@ interface NewsCardProps {
   excerpt: string
   category: string
   date: string
-  image: string
+  image: string | null
   href: string
 }
 
@@ -17,7 +17,7 @@ export function NewsCard({ title, excerpt, category, date, image, href }: NewsCa
       <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 h-full">
         <div className="aspect-video relative overflow-hidden bg-muted">
           <img
-            src={image || "/placeholder.svg"}
+            src={image || "https://placehold.co/600x400"}
             alt={title}
             className="object-cover w-full h-full hover:scale-105 transition-transform duration-300"
           />
