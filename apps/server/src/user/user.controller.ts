@@ -8,6 +8,13 @@ import { authMiddleware } from "@/middleware/auth";
 const service = new UserService();
 const router = Router();
 
+router.get('/me', authMiddleware, async (req: Request, res: Response) => {
+  const userId = req.user!.sub;
+
+  const output = await service.getUserById(userId);
+  res.status(200).json(output);
+});
+
 router.post(
   "/register",
   authMiddleware,

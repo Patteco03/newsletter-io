@@ -9,6 +9,25 @@ import { BadRequestException } from "@/exceptions/BadRequestException";
 export default class UserService {
   constructor(private readonly model: typeof db.user = db.user) {}
 
+  public async getUserById(id: string): Promise<GetUserDto> {
+    const user = await this.model.findUnique({
+      where: { id },
+    });
+
+    if (!user) {
+      throw new BadRequestException("User not found.");
+    }
+
+    return {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      role: user.role,
+      created_at: user.createdAt,
+      updated_at: user.updatedAt,
+    };
+  }
+
   public async createUser(input: CreateUserDto): Promise<GetUserDto> {
     const existingUser = await this.model.findUnique({
       where: { email: input.email },
