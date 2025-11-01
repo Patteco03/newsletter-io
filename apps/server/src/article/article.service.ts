@@ -2,7 +2,7 @@ import db from "@newsletter-io/db";
 import { subDays, subWeeks, subMonths } from "date-fns";
 
 import { NotFoundException } from "@/exceptions/NotFoundException";
-import CategoryService from "../Category/category.service";
+import CategoryService from "../category/category.service";
 import { CreateArticleDto } from "./dto/create.article.dto";
 import {
   GetArticleDto,
