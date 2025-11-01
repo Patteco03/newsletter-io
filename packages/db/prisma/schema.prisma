@@ -54,9 +54,9 @@ model Article {
   createdAt   DateTime  @default(now()) @map("created_at")
   updatedAt   DateTime  @updatedAt @map("updated_at")
 
-  authorId   String
+  authorId   String   @map("author_id")
   author     User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  categoryId String
+  categoryId String   @map("category_id")
   category   Category @relation(fields: [categoryId], references: [id], onDelete: Restrict)
 
   @@index([slug])
