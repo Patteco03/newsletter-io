@@ -1,6 +1,7 @@
 
 import { Card, CardContent } from "@/components/ui/card"
 import { Clock, ArrowRight } from "lucide-react"
+import { Link } from "react-router-dom"
 
 export function FeaturedNews() {
   return (
@@ -25,13 +26,13 @@ export function FeaturedNews() {
               Medidas incluem R$ 150 bilhões para modernização de rodovias, ferrovias e portos nos próximos cinco anos,
               com foco em sustentabilidade e desenvolvimento regional.
             </p>
-            <a
-              href="#"
+            <Link
+              to="#"
               className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:gap-3 transition-all"
             >
               Ler matéria completa
               <ArrowRight className="h-4 w-4" />
-            </a>
+            </Link>
           </div>
         </div>
       </CardContent>

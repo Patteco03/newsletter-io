@@ -1,5 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card"
 import { Clock } from "lucide-react"
+import { Link } from "react-router-dom"
 
 interface NewsCardProps {
   title: string
@@ -12,7 +13,7 @@ interface NewsCardProps {
 
 export function NewsCard({ title, excerpt, category, date, image, href }: NewsCardProps) {
   return (
-    <a href={href}>
+    <Link to={href}>
       <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 h-full">
         <div className="aspect-video relative overflow-hidden bg-muted">
           <img
@@ -33,6 +34,6 @@ export function NewsCard({ title, excerpt, category, date, image, href }: NewsCa
           <p className="text-sm text-muted-foreground line-clamp-3 leading-relaxed">{excerpt}</p>
         </CardContent>
       </Card>
-    </a>
+    </Link>
   )
 }

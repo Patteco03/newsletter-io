@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { Menu, User } from "lucide-react"
+import { Link } from "react-router-dom"
 
 export function Header() {
   return (
@@ -10,33 +11,33 @@ export function Header() {
             <Button variant="ghost" size="icon" className="md:hidden">
               <Menu className="h-5 w-5" />
             </Button>
-            <a href="/" className="text-2xl font-bold tracking-tight">
+            <Link to="/" className="text-2xl font-bold tracking-tight">
               Notícias
-            </a>
+            </Link  >
             <nav className="hidden md:flex items-center gap-6">
-              <a href="/" className="text-sm font-medium hover:text-primary transition-colors">
+              <Link to="/" className="text-sm font-medium hover:text-primary transition-colors">
                 Início
-              </a>
-              <a href="#" className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
+              </Link>
+              <Link to="" className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
                 Política
-              </a>
-              <a href="#" className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
+              </Link>
+              <Link to="" className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
                 Economia
-              </a>
-              <a href="#" className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
+              </Link>
+              <Link to="" className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
                 Tecnologia
-              </a>
-              <a href="#" className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
+              </Link>
+              <Link to="" className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
                 Esportes
-              </a>
+              </Link>
             </nav>
           </div>
-          <a href="/login">
+          <Link to="/login">
             <Button variant="outline" size="sm" className="gap-2 bg-transparent">
               <User className="h-4 w-4" />
               <span className="hidden sm:inline">Entrar</span>
             </Button>
-          </a>
+          </Link>
         </div>
       </div>
     </header>

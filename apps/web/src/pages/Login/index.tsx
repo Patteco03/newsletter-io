@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft } from "lucide-react"
+import { Link } from "react-router-dom"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
@@ -21,13 +22,13 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center p-4 bg-linear-to-br from-background to-muted/20">
       <div className="w-full max-w-md">
         <div className="mb-8">
-          <a
-            href="/"
+          <Link
+            to="/"
             className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
             <ArrowLeft className="h-4 w-4" />
             Voltar para o site
-          </a>
+          </Link>
         </div>
 
         <Card>
@@ -51,9 +52,9 @@ export default function LoginPage() {
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <Label htmlFor="password">Senha</Label>
-                  <a href="#" className="text-xs text-primary hover:underline">
+                  <Link to="#" className="text-xs text-primary hover:underline">
                     Esqueceu a senha?
-                  </a>
+                  </Link>
                 </div>
                 <Input
                   id="password"
@@ -72,9 +73,9 @@ export default function LoginPage() {
           <CardFooter className="flex flex-col space-y-4">
             <div className="text-sm text-center text-muted-foreground">
               Não tem uma conta?{" "}
-              <a href="#" className="text-primary hover:underline font-medium">
+              <Link to="#" className="text-primary hover:underline font-medium">
                 Cadastre-se
-              </a>
+              </Link>
             </div>
           </CardFooter>
         </Card>
