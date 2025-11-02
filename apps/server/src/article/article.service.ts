@@ -5,6 +5,7 @@ import { NotFoundException } from "@/exceptions/NotFoundException";
 import CategoryService from "../category/category.service";
 import { CreateArticleDto } from "./dto/create.article.dto";
 import {
+  GetArticleDetailsDto,
   GetArticleDto,
   ListArticlesDto,
   ListArticlesFeedInput,
@@ -17,6 +18,37 @@ export default class UserService {
     private readonly model: typeof db.article = db.article,
     private readonly categoryService = new CategoryService()
   ) {}
+
+  public async getOne(id: string): Promise<GetArticleDetailsDto> {
+    const article = await this.model.findUnique({
+      where: { id },
+      include: { category: true, author: true },
+    });
+
+    if (!article) {
+      throw new NotFoundException("Article not found");
+    }
+
+    return {
+      id: article.id,
+      title: article.title,
+      slug: article.slug,
+      content: article.content,
+      cover_image: article.coverImage ?? null,
+      published: article.published,
+      category: {
+        id: article.category.id,
+        name: article.category.name,
+      },
+      author: {
+        id: article.author.id,
+        name: article.author.name,
+      },
+      published_at: article.publishedAt,
+      created_at: article.createdAt,
+      updated_at: article.updatedAt,
+    };
+  }
 
   public async getFeed({
     page,
@@ -171,11 +203,16 @@ export default class UserService {
       Object.assign(input, { slug: this.generateSlug(input.title) });
     }
 
+    const { category_id, ...rest } = input;
+
     const updated = await this.model.update({
       data: {
-        ...input,
-        ...(input.published && {
+        ...rest,
+        ...(rest.published && {
           publishedAt: new Date(),
+        }),
+        ...(category_id && {
+          categoryId: category_id,
         }),
       },
       where: { id },

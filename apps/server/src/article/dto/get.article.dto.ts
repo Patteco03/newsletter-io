@@ -13,6 +13,10 @@ export interface GetArticleDto {
   updated_at: Date;
 }
 
+export interface GetArticleDetailsDto extends GetArticleDto {
+  author: { id: string; name: string };
+}
+
 interface ListArticles {
   period?: "day" | "week" | "month";
   page: number;
