@@ -161,8 +161,6 @@ export default class UserService {
       }
     }
 
-    await this.model.delete({
-      where: { id },
-    });
+    await this.model.softDelete({ id });
   }
 }

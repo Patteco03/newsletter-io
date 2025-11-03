@@ -242,7 +242,7 @@ export default class UserService {
       throw new NotFoundException("Article not found");
     }
 
-    await this.model.delete({ where: { id } });
+    await this.model.softDelete({ id });
   }
 
   private generateSlug(title: string): string {

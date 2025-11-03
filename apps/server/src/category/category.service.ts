@@ -115,8 +115,6 @@ export default class CategoryService {
       throw new NotFoundException("Category not found.");
     }
 
-    await this.model.delete({
-      where: { id },
-    });
+    await this.model.softDelete({ id });
   }
 }
