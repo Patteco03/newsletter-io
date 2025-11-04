@@ -2,6 +2,12 @@ import type React from "react";
 import { createContext, useContext, useState, useEffect } from "react";
 import api from "@/lib/api";
 
+interface LoginResponse {
+  token: string;
+  type: string;
+  expires_in: number;
+}
+
 interface User {
   id: string;
   email: string;
@@ -34,16 +40,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = async (email: string, password: string) => {
     setIsLoading(true);
     try {
-      const response = await api.post('/users/login', { email, password });
+      const response = await api.post<LoginResponse>('/users/login', { email, password });
       const user = response.data;
-
-      api.defaults.headers.common['Authorization'] = `Bearer ${user.token}`;
+      localStorage.setItem("token", user.token);
 
       const responseMe = await api.get('/users/me');
       const me = responseMe.data;
-
       localStorage.setItem("user", JSON.stringify(me));
-      localStorage.setItem("token", user.token);
       setUser(me);
     } finally {
       setIsLoading(false);
