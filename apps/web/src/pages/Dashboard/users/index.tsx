@@ -43,7 +43,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Plus, Edit, Trash2 } from "lucide-react";
+import { Plus, Edit, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
 import {
   userRole,
   type UserItem,
@@ -83,6 +83,10 @@ export default function UsersManagementPage() {
   const [users, setUsers] = useState<UserItem[]>([]);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(false);
   const form = useForm<UserFormData>({
     resolver: zodResolver(userSchema),
     defaultValues: {
@@ -93,23 +97,36 @@ export default function UsersManagementPage() {
     },
   });
 
-  const fetchUsers = async () => {
+  const fetchUsers = async (pageNum: number = page, limitNum: number = limit) => {
+    setLoading(true);
     try {
-      const response = await api.get<UserResponse>("/users");
+      const response = await api.get<UserResponse>("/users", {
+        params: {
+          page: pageNum,
+          limit: limitNum,
+        },
+      });
       setUsers(response.data.data);
+      setTotal(response.data.meta.total);
     } catch (error) {
       console.error("Error fetching users:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchUsers();
-  }, []);
+    fetchUsers(page, limit);
+  }, [page, limit]);
+
+  const totalPages = Math.ceil(total / limit);
+  const startItem = (page - 1) * limit + 1;
+  const endItem = Math.min(page * limit, total);
 
   const onSubmit = async (data: UserFormData) => {
     try {
       await api.post("/users/register", data);
-      await fetchUsers();
+      await fetchUsers(page, limit);
 
       setIsCreateDialogOpen(false);
       form.reset();
@@ -127,8 +144,14 @@ export default function UsersManagementPage() {
   const handleDelete = async (id: string) => {
     try {
       await api.delete(`/users/${id}`);
-      setUsers(users.filter((user) => user.id !== id));
       setDeleteId(null);
+      
+      // Se deletar o último item da página e não for a primeira página, volta uma página
+      if (users.length === 1 && page > 1) {
+        setPage(page - 1);
+      } else {
+        await fetchUsers(page, limit);
+      }
     } catch (error) {
       console.error("Error deleting user:", error);
       if (error instanceof AxiosError) {
@@ -290,7 +313,7 @@ export default function UsersManagementPage() {
         <CardHeader>
           <CardTitle>Todos os Usuários</CardTitle>
           <CardDescription>
-            Total de {users.length} usuários no sistema
+            Mostrando {startItem} a {endItem} de {total} usuários
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -306,42 +329,106 @@ export default function UsersManagementPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {users.map((user) => (
-                  <TableRow key={user.id}>
-                    <TableCell className="font-medium">{user.name}</TableCell>
-                    <TableCell>{user.email}</TableCell>
-                    <TableCell>
-                      <span className="inline-flex px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300">
-                        {user.role === "ADMIN"
-                          ? "Admin"
-                          : user.role === "EDITOR"
-                          ? "Editor"
-                          : "Visualizador"}
-                      </span>
-                    </TableCell>
-                    <TableCell>
-                      {new Date(user.created_at).toLocaleDateString("pt-BR")}
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex items-center justify-end gap-2">
-                        <Button variant="ghost" size="sm">
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => setDeleteId(user.id)}
-                          className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
+                {loading ? (
+                  <TableRow>
+                    <TableCell colSpan={5} className="text-center py-8">
+                      <div className="text-muted-foreground">Carregando...</div>
                     </TableCell>
                   </TableRow>
-                ))}
+                ) : users.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={5} className="text-center py-8">
+                      <div className="text-muted-foreground">Nenhum usuário encontrado</div>
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  users.map((user) => (
+                    <TableRow key={user.id}>
+                      <TableCell className="font-medium">{user.name}</TableCell>
+                      <TableCell>{user.email}</TableCell>
+                      <TableCell>
+                        <span className="inline-flex px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300">
+                          {user.role === "ADMIN"
+                            ? "Admin"
+                            : user.role === "EDITOR"
+                            ? "Editor"
+                            : "Visualizador"}
+                        </span>
+                      </TableCell>
+                      <TableCell>
+                        {new Date(user.created_at).toLocaleDateString("pt-BR")}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <div className="flex items-center justify-end gap-2">
+                          <Button variant="ghost" size="sm">
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => setDeleteId(user.id)}
+                            className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
               </TableBody>
             </Table>
           </div>
+          
+          {/* Pagination Controls */}
+          {total > 0 && (
+            <div className="flex items-center justify-between mt-4 pt-4 border-t">
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-muted-foreground">Itens por página:</span>
+                <Select
+                  value={limit.toString()}
+                  onValueChange={(value) => {
+                    setLimit(Number(value));
+                    setPage(1);
+                  }}
+                >
+                  <SelectTrigger className="w-20">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="10">10</SelectItem>
+                    <SelectItem value="20">20</SelectItem>
+                    <SelectItem value="50">50</SelectItem>
+                    <SelectItem value="100">100</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-muted-foreground">
+                  Página {page} de {totalPages}
+                </span>
+                <div className="flex items-center gap-1">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setPage((prev) => Math.max(1, prev - 1))}
+                    disabled={page === 1 || loading}
+                  >
+                    <ChevronLeft className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setPage((prev) => Math.min(totalPages, prev + 1))}
+                    disabled={page === totalPages || loading}
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
         </CardContent>
       </Card>
 
