@@ -8,6 +8,7 @@
     "start": "node dist/index.js"
   },
   "dependencies": {
+    "@newsletter-io/agent": "*",
     "@newsletter-io/broker": "*",
     "@newsletter-io/db": "*",
     "bcryptjs": "^3.0.2",
