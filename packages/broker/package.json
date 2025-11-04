@@ -1,0 +1,29 @@
+{
+  "name": "@newsletter-io/broker",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./src/index.ts"
+    },
+    "./*": {
+      "types": "./dist/*.d.ts",
+      "default": "./src/*.ts"
+    }
+  },
+  "scripts": {
+    "broker:start": "docker compose up -d",
+    "broker:watch": "docker compose up",
+    "broker:stop": "docker compose stop",
+    "broker:down": "docker compose down"
+  },
+  "dependencies": {
+    "amqplib": "^0.10.4"
+  },
+  "devDependencies": {
+    "@types/amqplib": "^0.10.4"
+  }
+}
+
