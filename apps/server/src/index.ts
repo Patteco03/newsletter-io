@@ -8,6 +8,7 @@ import { errorHandler } from "./middleware/errorHandler";
 
 import { queue } from "./queue";
 import { CreateArticleConsumer } from "./article/consumers/create-article.consumer";
+import { UpdateArticleConsumer } from "./article/consumers/update-article.consumer";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -19,9 +20,14 @@ app.use(errorHandler);
 
 // Initialize RabbitMQ consumer
 const createArticleConsumer = new CreateArticleConsumer();
+const updateArticleConsumer = new UpdateArticleConsumer();
 
 createArticleConsumer.start().catch((error) => {
   console.error("Failed to start CreateArticleConsumer:", error);
+});
+
+updateArticleConsumer.start().catch((error) => {
+  console.error("Failed to start UpdateArticleConsumer:", error);
 });
 
 process.on("SIGINT", async () => {

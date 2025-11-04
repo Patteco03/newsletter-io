@@ -165,7 +165,7 @@ export default class UserService {
   public async update(
     id: string,
     input: Partial<CreateArticleDto>
-  ): Promise<GetArticleDto> {
+  ): Promise<void> {
     const article = await this.model.findUnique({ where: { id } });
     if (!article) {
       throw new NotFoundException("Article not found");
@@ -179,37 +179,7 @@ export default class UserService {
       Object.assign(input, { slug: this.generateSlug(input.title) });
     }
 
-    const { category_id, ...rest } = input;
-
-    const updated = await this.model.update({
-      data: {
-        ...rest,
-        ...(rest.published && {
-          publishedAt: new Date(),
-        }),
-        ...(category_id && {
-          categoryId: category_id,
-        }),
-      },
-      where: { id },
-      include: { category: true },
-    });
-
-    return {
-      id: updated.id,
-      title: updated.title,
-      slug: updated.slug,
-      content: updated.content,
-      cover_image: updated.coverImage ?? null,
-      published: updated.published,
-      category: {
-        id: updated.category.id,
-        name: updated.category.name,
-      },
-      published_at: updated.publishedAt ?? null,
-      created_at: updated.createdAt,
-      updated_at: updated.updatedAt,
-    };
+    await queue.publish("article.update.queue", { id, payload: input });
   }
 
   public async delete(id: string): Promise<void> {

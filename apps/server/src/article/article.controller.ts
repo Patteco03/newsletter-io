@@ -51,8 +51,8 @@ router.post(
 router.put("/:id", async (req: Request, res: Response) => {
   const { id } = req.params as any;
   const payload = req.body;
-  const output = await service.update(id, payload);
-  return res.status(200).json(output);
+  await service.update(id, payload);
+  return res.status(204).end();
 });
 
 router.delete("/:id", async (req: Request, res: Response) => {
