@@ -1,5 +1,6 @@
 import db from "@newsletter-io/db";
 import { subDays, subWeeks, subMonths } from "date-fns";
+import { queue } from "@/queue";
 
 import { NotFoundException } from "@/exceptions/NotFoundException";
 import CategoryService from "../category/category.service";
@@ -17,7 +18,7 @@ export default class UserService {
   constructor(
     private readonly model: typeof db.article = db.article,
     private readonly categoryService = new CategoryService()
-  ) {}
+  ) { }
 
   public async getOne(id: string): Promise<GetArticleDetailsDto> {
     const article = await this.model.findUnique({
@@ -142,8 +143,12 @@ export default class UserService {
   public async create(
     userId: string,
     input: CreateArticleDto
-  ): Promise<GetArticleDto> {
-    const category = await this.categoryService.findOne(input.category_id);
+  ): Promise<void> {
+    const checkCategory = await this.categoryService.findOne(input.category_id);
+
+    if (!checkCategory) {
+      throw new NotFoundException("Category not found");
+    }
 
     const slug = this.generateSlug(input.title);
     const existSlug = await this.model.findUnique({ where: { slug } });
@@ -154,36 +159,7 @@ export default class UserService {
       );
     }
 
-    const article = await this.model.create({
-      data: {
-        title: input.title,
-        slug,
-        content: input.content,
-        authorId: userId,
-        categoryId: category.id,
-        coverImage: input.cover_image,
-        published: input.published,
-        ...(input.published && {
-          publishedAt: new Date(),
-        }),
-      },
-    });
-
-    return {
-      id: article.id,
-      title: article.title,
-      slug: article.slug,
-      content: article.content,
-      cover_image: article.coverImage ?? null,
-      published: article.published,
-      category: {
-        id: category.id,
-        name: category.name,
-      },
-      published_at: article.publishedAt ?? null,
-      created_at: article.createdAt,
-      updated_at: article.updatedAt,
-    };
+    await queue.publish("article.create.queue", { userId, payload: { ...input, slug } });
   }
 
   public async update(

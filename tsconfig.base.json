@@ -4,6 +4,7 @@
 		"baseUrl": ".",
 		"paths": {
       "@newsletter-io/db": ["packages/db/src"],
+      "@newsletter-io/broker": ["packages/broker/src"],
       "@newsletter-io/server": ["apps/server/src"],
       "@newsletter-io/web": ["apps/web/src"]
     },

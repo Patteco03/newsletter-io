@@ -43,8 +43,8 @@ router.post(
   async (req: Request, res: Response) => {
     const user = req.user;
     const payload = req.body;
-    const output = await service.create(user?.sub!, payload);
-    return res.status(201).json(output);
+    await service.create(user?.sub!, payload);
+    return res.status(204).end();
   }
 );
 

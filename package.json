@@ -10,7 +10,11 @@
   "license": "MIT",
   "scripts": {
     "dev:server": "yarn workspace @newsletter-io/server dev",
-    "dev:web": "yarn workspace @newsletter-io/web dev"
+    "dev:web": "yarn workspace @newsletter-io/web dev",
+    "broker:start": "yarn workspace @newsletter-io/broker broker:start",
+    "broker:stop": "yarn workspace @newsletter-io/broker broker:stop",
+    "broker:watch": "yarn workspace @newsletter-io/broker broker:watch",
+    "broker:down": "yarn workspace @newsletter-io/broker broker:down"
   },
   "dependencies": {
     "axios": "^1.13.1",
