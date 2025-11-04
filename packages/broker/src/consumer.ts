@@ -64,7 +64,7 @@ export class Consumer {
           channel.ack(msg);
         } catch (error) {
           console.error('Error processing message:', error);
-          channel.nack(msg, false, true); 
+          channel.nack(msg, false, false); 
         }
       });
 

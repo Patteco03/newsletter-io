@@ -27,6 +27,9 @@ export interface ConsumeOptions {
   autoDelete?: boolean;
   arguments?: Record<string, any>;
   prefetch?: number;
+  deadLetterExchange?: string;
+  deadLetterQueue?: string;
+  maxRetries?: number;
 }
 
 export interface Message {
