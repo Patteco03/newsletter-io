@@ -7,7 +7,6 @@ import CategoryService from "../category/category.service";
 import { CreateArticleDto } from "./dto/create.article.dto";
 import {
   GetArticleDetailsDto,
-  GetArticleDto,
   ListArticlesDto,
   ListArticlesFeedInput,
   ListArticlesInput,
