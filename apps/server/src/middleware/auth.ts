@@ -2,7 +2,13 @@ import { UnauthorizedException } from "@/exceptions/UnauthorizedException";
 import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 
+const PUBLIC_ROUTES = ["/login", "/feed"];
+
 export function authMiddleware(req: Request, _: Response, next: NextFunction) {
+  if (PUBLIC_ROUTES.includes(req.path)) {
+    return next();
+  }
+
   const authHeader = req.headers.authorization;
   if (!authHeader) {
     throw new UnauthorizedException("No token provided");
