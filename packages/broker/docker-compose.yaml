@@ -3,14 +3,13 @@ name: newsletter_io_broker
 services:
   rabbitmq:
     image: rabbitmq:3-management-alpine
-    container_name: newsletter_io_rabbitmq
     environment:
       RABBITMQ_DEFAULT_USER: admin
       RABBITMQ_DEFAULT_PASS: admin
       RABBITMQ_DEFAULT_VHOST: /
     ports:
-      - "5672:5672"   # AMQP port
-      - "15672:15672" # Management UI port
+      - "5672:5672"
+      - "15672:15672"
     volumes:
       - newsletter_io_rabbitmq_data:/var/lib/rabbitmq
     healthcheck:
@@ -21,5 +20,4 @@ services:
     restart: unless-stopped
 
 volumes:
-  newsletter_io_rabbitmq_data:
-
+  newsletter_io_rabbitmq_data: {}

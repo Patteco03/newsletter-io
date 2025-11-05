@@ -1,0 +1,68 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": ["dist/**", ".next/**"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "dev:server": {
+      "cache": false,
+      "persistent": true
+    },
+    "dev:web": {
+      "cache": false,
+      "persistent": true
+    },
+    "broker:start": {
+      "cache": false,
+      "persistent": true
+    },
+    "broker:stop": {},
+    "broker:watch": {
+      "cache": false,
+      "persistent": true
+    },
+    "broker:down": {},
+    "db:start": {
+      "cache": false,
+      "persistent": true
+    },
+    "db:stop": {},
+    "db:watch": {
+      "cache": false,
+      "persistent": true
+    },
+    "db:down": {},
+    "db:up": {
+      "cache": false,
+      "persistent": true
+    },
+    "db:create": {
+      "cache": false,
+      "persistent": true
+    },
+    "db:migrate": {
+      "cache": false,
+      "persistent": true
+    },
+    "db:seed": {
+      "cache": false,
+      "persistent": true
+    },
+    "broker:create": {
+      "cache": false,
+      "persistent": true
+    },
+    "lint": {
+      "dependsOn": ["^lint"]
+    },
+    "type-check": {
+      "dependsOn": ["^type-check"]
+    }
+  }
+}

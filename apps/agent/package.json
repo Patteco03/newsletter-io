@@ -3,9 +3,12 @@
   "version": "1.0.0",
   "main": "src/index.ts",
   "license": "MIT",
+  "type": "module",
   "scripts": {
+    "build": "tsdown",
+    "check-types": "tsc -b",
     "dev": "tsx watch src/index.ts",
-    "build": "tsc"
+    "start": "node dist/index.mjs"
   },
   "dependencies": {
     "openai": "^4.20.1",
@@ -16,4 +19,3 @@
     "typescript": "^5.9.3"
   }
 }
-

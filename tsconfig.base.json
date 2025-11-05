@@ -8,7 +8,7 @@
       "@newsletter-io/server": ["apps/server/src"],
       "@newsletter-io/web": ["apps/web/src"]
     },
-		"target": "ESNext",
+		"target": "es2020",
 		"module": "ESNext",
 		"moduleResolution": "bundler",
 		"lib": ["ESNext"],

@@ -1,9 +1,8 @@
-name: newsletter_io
+name: newsletter_io_db
 
 services:
   postgres:
     image: postgres
-    container_name: newsletter_io
     environment:
       POSTGRES_DB: newsletter_db
       POSTGRES_USER: postgres
@@ -20,4 +19,4 @@ services:
     restart: unless-stopped
 
 volumes:
-  newsletter_io_postgres_data:
+  newsletter_io_postgres_data: {}
