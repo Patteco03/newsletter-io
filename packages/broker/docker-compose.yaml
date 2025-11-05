@@ -1,7 +1,7 @@
 name: newsletter_io_broker
 
 services:
-  rabbitmq:
+  broker:
     image: rabbitmq:3-management-alpine
     environment:
       RABBITMQ_DEFAULT_USER: admin

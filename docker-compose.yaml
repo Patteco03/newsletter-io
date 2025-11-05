@@ -1,0 +1,48 @@
+name: newsletter-io
+
+services:
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: server
+    command: yarn dev:server
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./apps/server/.env
+    depends_on:
+      - postgres
+      - broker
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: web
+    command: yarn dev:web
+    ports:
+      - "5173:5173"
+    environment:
+      NODE_ENV: development
+      VITE_API_URL: http://server:3000
+    depends_on:
+      - server
+
+  postgres:
+    extends:
+      file: packages/db/docker-compose.yaml
+      service: postgres
+    env_file:
+      - ./apps/server/.env
+
+  broker:
+    extends:
+      file: packages/broker/docker-compose.yaml
+      service: broker
+    env_file:
+      - ./apps/server/.env
+
+volumes:
+  newsletter_io_postgres_data:
+  newsletter_io_rabbitmq_data:
