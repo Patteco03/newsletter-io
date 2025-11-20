@@ -1,4 +1,4 @@
-import db from "@newsletter-io/db";
+import dbImport from "@newsletter-io/db";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
@@ -12,8 +12,12 @@ import {
 import { BadRequestException } from "@/exceptions/BadRequestException";
 import { NotFoundException } from "@/exceptions/NotFoundException";
 
+const db = (dbImport as any).default || dbImport;
+
 export default class UserService {
-  constructor(private readonly model: typeof db.user = db.user) {}
+  private readonly model = db.user;
+
+  constructor() {}
 
   public async getAllUsers(
     user: Express.UserPayload,

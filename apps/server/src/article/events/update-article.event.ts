@@ -1,9 +1,13 @@
-import db from "@newsletter-io/db";
+import dbImport from "@newsletter-io/db";
 import { SummaryService } from "@newsletter-io/agent";
 import { CreateArticleEventPayload } from "./create-article.event";
 
+const db = (dbImport as any).default || dbImport;
+
 export default class UpdateArticleEvent {
-  constructor(private readonly model: typeof db.article = db.article) { }
+  private readonly model = db.article;
+
+  constructor() { }
 
   public async execute(id: string, payload: Partial<CreateArticleEventPayload>): Promise<void> {
     const { category_id, ...rest } = payload;

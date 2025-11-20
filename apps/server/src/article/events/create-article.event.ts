@@ -1,6 +1,8 @@
-import db from "@newsletter-io/db";
+import dbImport from "@newsletter-io/db";
 import { SummaryService } from "@newsletter-io/agent";
 import { CreateArticleDto } from "../dto/create.article.dto";
+
+const db = (dbImport as any).default || dbImport;
 
 export interface CreateArticleEventPayload extends CreateArticleDto {
   slug: string;
@@ -8,7 +10,9 @@ export interface CreateArticleEventPayload extends CreateArticleDto {
 }
 
 export default class CreateArticleEvent {
-  constructor( private readonly model: typeof db.article = db.article) {}
+  private readonly model = db.article;
+
+  constructor() {}
   
   public async execute(userId: string, payload: CreateArticleEventPayload): Promise<void> {
     if (!payload.excerpt) {

@@ -1475,10 +1475,6 @@
   dependencies:
     tslib "^2.4.0"
 
-"@types/@faker-js/faker":
-  version "10.1.0"
-  resolved "https://codeload.github.com/faker-js/faker/tar.gz/f81abc77a34d8a2016f06b73ed859fef44446c2d"
-
 "@types/amqplib@^0.10.4":
   version "0.10.8"
   resolved "https://registry.yarnpkg.com/@types/amqplib/-/amqplib-0.10.8.tgz#23f2945d055e9fd583da672aa5ec0c7350b9e4e6"

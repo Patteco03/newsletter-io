@@ -49,3 +49,4 @@ function applySoftDeleteFilter(args: Record<string, any> = {}) {
 }
 
 export default prisma;
+export { prisma as db };

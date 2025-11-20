@@ -28,6 +28,10 @@
       "persistent": true
     },
     "broker:down": {},
+    "db:push": {
+      "cache": false,
+      "persistent": true
+    },
     "db:start": {
       "cache": false,
       "persistent": true
@@ -51,6 +55,10 @@
       "persistent": true
     },
     "db:seed": {
+      "cache": false,
+      "persistent": true
+    },
+    "db:generate": {
       "cache": false,
       "persistent": true
     },

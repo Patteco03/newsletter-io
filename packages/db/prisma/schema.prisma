@@ -1,8 +1,9 @@
 generator client {
-  provider     = "prisma-client"
-  output       = "./generated"
-  moduleFormat = "esm"
-  runtime      = "nodejs"
+  provider      = "prisma-client"
+  output        = "./generated"
+  moduleFormat  = "esm"
+  runtime       = "nodejs"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {

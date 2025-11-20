@@ -22,7 +22,7 @@ function App() {
           limit,
         },
       });
-      
+
       if (append) {
         setNews((prev) => {
           const newNews = [...prev, ...response.data.data];
@@ -32,7 +32,8 @@ function App() {
         });
       } else {
         setNews(response.data.data);
-        setHasMore(response.data.data.length < response.data.meta.total);
+        const hasMore = response?.data?.data?.length < response?.data?.meta?.total;
+        setHasMore(!!hasMore);
       }
     } catch (error) {
       console.error("Error fetching news:", error);
@@ -58,7 +59,7 @@ function App() {
           fetchNews(nextPage, true);
         }
       },
-      { 
+      {
         threshold: 0.1,
         rootMargin: '100px'
       }
@@ -80,7 +81,7 @@ function App() {
     <div className="mb-8">
       <h2 className="text-2xl font-bold mb-6">Últimas Notícias</h2>
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {news.map((article, index) => (
+        {news && news.map((article, index) => (
           <NewsCard
             key={`${article.slug}-${index}`}
             title={article.title}
@@ -92,19 +93,19 @@ function App() {
           />
         ))}
       </div>
-      
+
       {loading && (
         <div className="flex justify-center items-center py-8">
           <div className="text-gray-500">Carregando mais notícias...</div>
         </div>
       )}
-      
-      {!hasMore && news.length > 0 && (
+
+      {!hasMore && news && news.length > 0 && (
         <div className="flex justify-center items-center py-8">
           <div className="text-gray-500">Você viu todas as notícias!</div>
         </div>
       )}
-      
+
       <div ref={observerTarget} className="h-4" />
     </div>
   )

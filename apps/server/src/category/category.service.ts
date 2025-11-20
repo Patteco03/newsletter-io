@@ -1,4 +1,4 @@
-import db from "@newsletter-io/db";
+import dbImport from "@newsletter-io/db";
 import { BadRequestException } from "@/exceptions/BadRequestException";
 import { NotFoundException } from "@/exceptions/NotFoundException";
 import { CreateCategoryDto } from "./dto/create.category.dto";
@@ -8,8 +8,12 @@ import {
   ListCategoryInput,
 } from "./dto/get.category.dto";
 
+const db = (dbImport as any).default || dbImport;
+
 export default class CategoryService {
-  constructor(private readonly model: typeof db.category = db.category) {}
+  private readonly model = db.category;
+
+  constructor() {}
 
   public async getAll({
     page,

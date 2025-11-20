@@ -1,4 +1,4 @@
-import db from "@newsletter-io/db";
+import dbImport from "@newsletter-io/db";
 import { subDays, subWeeks, subMonths } from "date-fns";
 import { queue } from "@/queue";
 
@@ -13,9 +13,12 @@ import {
 } from "./dto/get.article.dto";
 import { BadRequestException } from "@/exceptions/BadRequestException";
 
-export default class UserService {
+const db = (dbImport as any).default || dbImport;
+
+export default class ArticleService {
+  private readonly model = db.article;
+
   constructor(
-    private readonly model: typeof db.article = db.article,
     private readonly categoryService = new CategoryService()
   ) { }
 
@@ -61,6 +64,8 @@ export default class UserService {
       published: true,
       ...(period && { publishedAt: this.getDateRange(period) }),
     };
+
+    console.log({page, limit, period})
 
     const [data, total] = await Promise.all([
       this.model.findMany({

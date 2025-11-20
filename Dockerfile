@@ -4,7 +4,7 @@ RUN corepack enable
 
 WORKDIR /app
 
-COPY package.json yarn.lock turbo.json ./
+COPY package.json yarn.lock turbo.json tsconfig.json tsconfig.base.json ./
 COPY apps ./apps
 COPY packages ./packages
 
@@ -14,6 +14,8 @@ ENV NODE_ENV=development
 ENV TURBO_TELEMETRY_DISABLED=1
 
 RUN yarn install --frozen-lockfile
+
+RUN yarn db:generate
 
 EXPOSE $PORT
 
